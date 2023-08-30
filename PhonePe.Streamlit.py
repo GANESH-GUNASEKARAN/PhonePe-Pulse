@@ -20,7 +20,7 @@ host = 'xxxx'
 port = 'yyyy'
 database = 'zzzz'
 username = 'aaaa'
-password = 'your password'
+password = 'bbbb'
 PROJECT = psycopg2.connect(host=host, port=port, database=database, user=username, password=password)
 cursor = PROJECT.cursor()
 
@@ -38,12 +38,10 @@ T2=cursor.fetchall()
 aggusers=pd.DataFrame(T2, columns=['State', 'Year', 'Quarter', 'Brands', 'TransactionCount', 'Percentage'])
 
 
-
 cursor.execute('''select * from maptrans;''')
 PROJECT.commit()
 T3=cursor.fetchall()
 maptrans=pd.DataFrame(T3, columns=['State', 'Year', 'Quarter', 'Count', 'Amount'])
-
 
 
 cursor.execute('''select * from mapusers;''')
@@ -52,12 +50,10 @@ T4=cursor.fetchall()
 mapusers=pd.DataFrame(T4, columns=['State', 'Year', 'Quarter', 'Users', 'AppOpens'])
 
 
-
 cursor.execute('''select * from toptrans;''')
 PROJECT.commit()
 T5=cursor.fetchall()
 toptrans=pd.DataFrame(T5, columns=['State', 'Year', 'Quarter', 'Count', 'Amount' ])
-
 
 
 cursor.execute('''select * from topusers;''')
@@ -157,6 +153,7 @@ def nine():
     P1=P1.sort_values(by='RegisteredUsers', ascending=False)
     P1=P1.head(10)
     fig=px.bar(P1,x='Pincodes',y='RegisteredUsers',color_discrete_sequence=px.colors.sequential.gray)
+    fig.update_layout(xaxis_type="category")
     st.plotly_chart(fig)
 
 
@@ -208,8 +205,9 @@ def t(year,qr):
 
 # STREAMLIT
 
+st.set_page_config(layout='wide')
 st.title("PHONEPE DATA VISUALISATION AND EXPLORATION")
-tab1,tab2=st.tabs(['ONE','TWO'])
+tab1,tab2,tab3=st.tabs(['Explore Data','Top Charts','About'])
 with tab1:
     col1,col2=st.columns(2)
     with col1:
@@ -240,7 +238,12 @@ with tab2:
         nine()
     elif Q=='Phone brands with most transaction count':
         ten()
-
+with tab3:
+    st.write('1. PhonePe is an Indian digital payments and financial services application.')
+    st.write('2. The PhonePe app is available in 11 Indian languages.')
+    st.write('3. Using PhonePe, users can send and receive money, recharge mobile, DTH, data cards, make utility payments, pay at shops, invest in tax saving funds, liquid funds, buy insurance, mutual funds, and digital gold.')
+    st.write('4. PhonePe is licensed by the Reserve Bank of India for the issuance and operation of a Semi Closed Prepaid Payment system with Authorisation Number: 75/2014 dated 22 August 2014.')
+    st.write('5. AWARDS: Won the UPI Digital Innovation Award from NPCI in 2018.')
 
 
 
